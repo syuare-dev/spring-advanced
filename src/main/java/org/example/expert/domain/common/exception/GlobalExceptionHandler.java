@@ -1,13 +1,13 @@
-package org.example.expert.config;
+package org.example.expert.domain.common.exception;
 
 import org.example.expert.domain.auth.exception.AuthException;
-import org.example.expert.domain.common.exception.InvalidRequestException;
-import org.example.expert.domain.common.exception.ServerException;
+import org.example.expert.domain.common.enums.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +31,23 @@ public class GlobalExceptionHandler {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         return getErrorResponse(status, ex.getMessage());
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionDto> handleAccessDeniedException(AccessDeniedException e) {
+        ErrorCode errorCode = ErrorCode.REQUIRE_ADMIN;
+
+        ExceptionDto exceptionDto = new ExceptionDto(errorCode.getStatus(), errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getStatus()).body(exceptionDto);
+    }
+
+
+    //커스텀 예외 처리기
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ExceptionDto> handleCustomException(CustomException e) {
+        ExceptionDto exceptionDto = new ExceptionDto(e.getStatus(), e.getMessage());
+        return ResponseEntity.status(e.getStatus()).body(exceptionDto);
+    }
+
 
     public ResponseEntity<Map<String, Object>> getErrorResponse(HttpStatus status, String message) {
         Map<String, Object> errorResponse = new HashMap<>();
