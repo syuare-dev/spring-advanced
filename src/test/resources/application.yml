@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+
+
+jwt:
+  secret:
+    key: "mUKcH94cP9p9VzJD5vIFX9Vzq8gV6cewX7ymQJzqxnA"
+
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.hibernate.loader.entity.plan.AbstractLoadPlanBasedEntityLoader: TRACE
